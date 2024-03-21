@@ -56,6 +56,7 @@ JOIN Student ON Advisor.AdvisorID = Student.AdvisorID
 GROUP BY AdvisorName
 ORDER BY COUNT(StudentID) ASC;
 ''')
+print(cursor.fetchall())
 
 conn.commit()
 conn.close()
