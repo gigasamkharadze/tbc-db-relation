@@ -8,13 +8,14 @@ The database is created and filled with data by the `main.py` script.
 In the beginning, the relation was a one-to-many relation.
 A student can have only one advisor, but an advisor can have many students.
 
-
 Then, the relation was changed to a many-to-many relation.
 A student can have many advisors, and an advisor can have many students.
 
 ### Implementation details
 The database is implemented using SQLite. The database is created and filled with data by the `main.py` script.
-The database has two tables: `students` and `advisors`.
+The database had two tables: `students` and `advisors`.
+To implement the many-to-many relation, the `enrollment` table was added representing the relation between students and advisors.
+
 ```SQL
 CREATE TABLE Advisor(
 AdvisorID INTEGER NOT NULL,
@@ -33,16 +34,11 @@ PRIMARY KEY(StudentID)
 );
 ```
 
-Here, the primary key constraint is used to ensure that
-the `studentID` is unique in the `students` table.
-
-To obtain the many-to-many relation, we simpy change
-primary key constraint to unique constraint in the `students` table.
 ```SQL
-CREATE TABLE Student(
+CREATE TABLE Enrollment(
 StudentID NUMERIC NOT NULL,
-StudentName NUMERIC NOT NULL,
-AdvisorID INTEGER,
+AdvisorID INTEGER NOT NULL,
+FOREIGN KEY(StudentID) REFERENCES Student(StudentID),
 FOREIGN KEY(AdvisorID) REFERENCES Advisor(AdvisorID),
 PRIMARY KEY(StudentID, AdvisorID)
 );

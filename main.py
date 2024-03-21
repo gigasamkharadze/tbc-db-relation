@@ -18,6 +18,14 @@ FOREIGN KEY(AdvisorID) REFERENCES Advisor(AdvisorID),
 PRIMARY KEY(StudentID, AdvisorID)
 );
 
+CREATE TABLE Enrollment(
+StudentID NUMERIC NOT NULL,
+AdvisorID INTEGER NOT NULL,
+FOREIGN KEY(StudentID) REFERENCES Student(StudentID),
+FOREIGN KEY(AdvisorID) REFERENCES Advisor(AdvisorID),
+PRIMARY KEY(StudentID, AdvisorID)
+);
+
 INSERT INTO Advisor(AdvisorID, AdvisorName) VALUES
 (1,"John Paul"),
 (2,"Anthony Roy"),
@@ -25,37 +33,36 @@ INSERT INTO Advisor(AdvisorID, AdvisorName) VALUES
 (4,"Sam Reeds"),
 (5,"Arthur Clintwood");
 
-INSERT INTO Student(StudentID, StudentName, AdvisorID) VALUES
-(1,"John Doe",1),
-(2,"Jane Doe",1),
-(3,"John Smith",2),
-(4,"Jane Smith",2),
-(5,"John Johnson",3),
-(6,"Jane Johnson",3),
-(7,"John Williams",4),
-(8,"Jane Williams",4),
-(9,"John Brown",5),
-(10,"Jane Brown",5),
-(11,"John Paul",1),
-(12,"Jane Paul",1),
-(13,"John Roy",2),
-(14,"Jane Roy",2),
-(15,"John Shetty",3),
-(16,"Jane Shetty",3),
-(17,"John Reeds",4),
-(18,"Jane Reeds",4),
-(19,"John Clintwood",5),
-(20,"Jane Clintwood",5),
-(21,"Luka Doe",1),
-(22,"Buka Doe",1);
+INSERT INTO Student(StudentID, StudentName) VALUES
+(1,"John"),
+(2,"Paul"),
+(3,"Anthony"),
+(4,"Raj"),
+(5,"Sam"),
+(6,"Arthur");
+
+INSERT INTO Enrollment(StudentID, AdvisorID) VALUES
+(1,1),
+(1,2),
+(1,3),
+(2,1),
+(2,2),
+(2,3),
+(3,1),
+(3,2),
+(4,3),
+(4,4),
+(5,4),
+(5,5),
+(6,5);
 ''')
 
-cursor.execute('''
-SELECT AdvisorName, COUNT(StudentID) FROM Advisor
-JOIN Student ON Advisor.AdvisorID = Student.AdvisorID
-GROUP BY AdvisorName
-ORDER BY COUNT(StudentID) ASC;
-''')
+# advisors with the amount of students they have
+cursor.execute("""
+SELECT AdvisorName, COUNT(StudentID) FROM Enrollment
+JOIN Advisor ON Advisor.AdvisorID = Enrollment.AdvisorID
+GROUP BY Advisor.AdvisorID;
+""")
 print(cursor.fetchall())
 
 conn.commit()
